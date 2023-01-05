@@ -6,7 +6,8 @@
 trigger:
 - none
 variables:
-  IISWebsiteName: dotnetApp
+  IISWebsite1: dotnetApp
+  IISWebsite2: stagingapp
 
 resources:
   pipelines:
@@ -16,8 +17,8 @@ resources:
       branch: 'main'
       trigger: true
 stages:
-    - stage: DeployApp
-      displayName: 'Deploy App'
+    - stage: DevelopmentServer
+      displayName: 'Development Server Deploy'
       pool:
         vmImage: windows-latest
       jobs:
@@ -46,7 +47,7 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StopWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsite1 }}'
                        - task: IISWebAppDeploymentOnMachineGroup@0
                          name: 'DeployApp'
                          displayName: 'Deploy Application'
@@ -59,7 +60,7 @@ stages:
                          condition: failed()
                          displayName: 'Deploy Application Retry If Failed'
                          inputs:
-                           WebSiteName: '${{ variables.IISWebsiteName }}'
+                           WebSiteName: '${{ variables.IISWebsite1 }}'
                            Package: '$(pipeline.workspace)\a'
                            TakeAppOfflineFlag: true
                            
@@ -69,4 +70,59 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StartWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsite1 }}'
+    - stage: stagingServer
+      dependsOn: 'DevelopmentServer'
+      displayName: 'Staging Server Deploy'
+      pool:
+        vmImage: windows-latest
+      jobs:
+          - deployment: Deployapp
+            displayName: 'Deploy Dotnet App'
+            environment: 'dev.WIN-VM'
+            strategy:
+             runOnce:
+                 deploy:
+                   steps:
+                       - checkout: none
+
+                       - download: 'buildPipeline'
+                         name: 'DownloadArtifact'
+                         displayName: 'Download Artifact'
+                         artifact: 'drop'
+                       - task: ExtractFiles@1
+                         inputs:
+                           archiveFilePatterns: 'C:\azagent\A1\_work\1\buildPipeline\drop\*.zip'
+                           destinationFolder: '$(pipeline.workspace)\a'
+                           cleanDestinationFolder: true
+                           overwriteExistingFiles: false
+                       - task: IISWebAppManagementOnMachineGroup@0
+                         name: 'StopService'
+                         displayName: 'Stop Service'
+                         inputs:
+                           IISDeploymentType: 'IISWebsite'
+                           ActionIISWebsite: 'StopWebsite'
+                           StartStopWebsiteName: '${{ variables.IISWebsite2 }}'
+                       - task: IISWebAppDeploymentOnMachineGroup@0
+                         name: 'DeployApp'
+                         displayName: 'Deploy Application'
+                         inputs:
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
+                           Package: '$(pipeline.workspace)\a'
+                           TakeAppOfflineFlag: true
+                       - task: IISWebAppDeploymentOnMachineGroup@0
+                         name: 'DeployAppRetry'
+                         condition: failed()
+                         displayName: 'Deploy Application Retry If Failed'
+                         inputs:
+                           WebSiteName: '${{ variables.IISWebsite2 }}'
+                           Package: '$(pipeline.workspace)\a'
+                           TakeAppOfflineFlag: true
+                           
+                       - task: IISWebAppManagementOnMachineGroup@0
+                         name: 'StartService'
+                         displayName: 'Start Service'
+                         inputs:
+                           IISDeploymentType: 'IISWebsite'
+                           ActionIISWebsite: 'StartWebsite'
+                           StartStopWebsiteName: '${{ variables.IISWebsite2 }}'
