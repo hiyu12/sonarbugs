@@ -1,11 +1,11 @@
 parameters:
   IISWebsiteName: dotnetApp
-  depending: []
+  envtype: dev
 jobs:
   - deployment: Deployapp
     dependsOn: ${{ parameters.depending }}
     displayName: 'Deploy Dotnet App'
-    environment: 'dev.WIN-VM'
+    environment: '${{ parameters.envtype }}'
     timeoutInMinutes: 4320
     strategy:
       runOnce:
