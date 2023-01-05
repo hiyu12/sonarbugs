@@ -36,7 +36,6 @@ stages:
         timeoutInMinutes: 4320
         steps:
           - task: ManualValidation@0
-            displayName: 'Approval'
             timeoutInMinutes: 1440
             inputs:
               notifyUsers: 'akash.wave21@gmail.com'
