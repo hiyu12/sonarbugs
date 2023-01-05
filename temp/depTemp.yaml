@@ -4,7 +4,7 @@ parameters:
 jobs:
   - deployment: Deployapp
     displayName: 'Deploy Dotnet App'
-    environment: '${{ parameters.envtype }}
+    environment: '${{ parameters.envtype }}'
     strategy:
       runOnce:
         deploy:
