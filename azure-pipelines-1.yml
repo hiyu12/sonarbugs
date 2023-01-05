@@ -36,5 +36,15 @@ stages:
       - template: temp/depTemp.yaml
         parameters:
           IISWebsiteName: stagingapp
+          envtype: staging.WIN-VM
+  - stage: productionServer
+    dependsOn: 'stagingServer'
+    displayName: 'Staging Server Deploy'
+    pool:
+      vmImage: windows-latest
+    jobs:
+      - template: temp/depTemp.yaml
+        parameters:
+          IISWebsiteName: prodsite
           envtype: production.WIN-VM
         
