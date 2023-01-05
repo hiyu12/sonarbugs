@@ -17,7 +17,7 @@ jobs:
               artifact: 'drop'
             - task: ExtractFiles@1
               inputs:
-                archiveFilePatterns: 'C:\azagent\A1\_work\1\buildPipeline\drop\*.zip'
+                archiveFilePatterns: '$(pipeline.workspace)\buildPipeline\drop\*.zip'
                 destinationFolder: '$(pipeline.workspace)\a'
                 cleanDestinationFolder: true
                 overwriteExistingFiles: false
