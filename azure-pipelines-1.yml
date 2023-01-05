@@ -24,7 +24,7 @@ stages:
       - template: temp/depTemp.yaml
         parameters:
           IISWebsiteName: dotnetApp
-          depending: []
+          envtype: dev
   - stage: stagingServer
     dependsOn: 'DevelopmentServer'
     displayName: 'Staging Server Deploy'
@@ -33,18 +33,8 @@ stages:
     pool:
       vmImage: windows-latest
     jobs:
-      - job: 'ManualApproval'
-        timeoutInMinutes: 4320
-        steps:
-          - checkout: none
-          # - task: ManualValidation@0
-          #   timeoutInMinutes: 1440
-          #   inputs:
-          #     notifyUsers: 'akash.wave21@gmail.com'
-          #     instructions: 'Check previous job and approve'
-          #     onTimeout: 'resume'
       - template: temp/depTemp.yaml
         parameters:
           IISWebsiteName: stagingapp
-          depending: ManualApproval
+          envtype: production
         
