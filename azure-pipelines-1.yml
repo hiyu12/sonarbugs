@@ -39,7 +39,7 @@ stages:
                            archiveFilePatterns: 'C:\azagent\A1\_work\1\buildPipeline\drop\*.zip'
                            destinationFolder: '$(pipeline.workspace)\a'
                            cleanDestinationFolder: true
-                           overwriteExistingFiles: true
+                           overwriteExistingFiles: false
                        - task: IISWebAppManagementOnMachineGroup@0
                          name: 'StopService'
                          displayName: 'Stop Service'
