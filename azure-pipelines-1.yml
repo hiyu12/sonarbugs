@@ -36,5 +36,5 @@ stages:
       - template: temp/depTemp.yaml
         parameters:
           IISWebsiteName: stagingapp
-          envtype: production
+          envtype: production.WIN-VM
         
