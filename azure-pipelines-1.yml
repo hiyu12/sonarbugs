@@ -17,7 +17,7 @@ stages:
   - stage: DevelopmentServer
     variables:
       IISWebsiteName: dotnetApp
-    displayName: 'Development Server Deploy'
+    displayName: 'Development'
     pool:
       vmImage: windows-latest
     jobs:
@@ -27,7 +27,7 @@ stages:
           envtype: dev.WIN-VM
   - stage: stagingServer
     dependsOn: 'DevelopmentServer'
-    displayName: 'Staging Server Deploy'
+    displayName: 'Staging'
     variables:
       IISWebsiteName: stagingapp
     pool:
@@ -39,7 +39,7 @@ stages:
           envtype: staging.WIN-VM
   - stage: productionServer
     dependsOn: 'stagingServer'
-    displayName: 'Staging Server Deploy'
+    displayName: 'Production'
     pool:
       vmImage: windows-latest
     jobs:
