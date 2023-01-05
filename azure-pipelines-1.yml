@@ -18,6 +18,8 @@ resources:
       trigger: true
 stages:
     - stage: DevelopmentServer
+      variables:
+        IISWebsiteName: dotnetApp
       displayName: 'Development Server Deploy'
       pool:
         vmImage: windows-latest
@@ -47,7 +49,7 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StopWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsite1 }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
                        - task: IISWebAppDeploymentOnMachineGroup@0
                          name: 'DeployApp'
                          displayName: 'Deploy Application'
@@ -60,7 +62,7 @@ stages:
                          condition: failed()
                          displayName: 'Deploy Application Retry If Failed'
                          inputs:
-                           WebSiteName: '${{ variables.IISWebsite1 }}'
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
                            Package: '$(pipeline.workspace)\a'
                            TakeAppOfflineFlag: true
                            
@@ -70,10 +72,12 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StartWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsite1 }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
     - stage: stagingServer
       dependsOn: 'DevelopmentServer'
       displayName: 'Staging Server Deploy'
+      variables:
+        IISWebsiteName: stagingapp
       pool:
         vmImage: windows-latest
       jobs:
@@ -102,7 +106,7 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StopWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsite2 }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
                        - task: IISWebAppDeploymentOnMachineGroup@0
                          name: 'DeployApp'
                          displayName: 'Deploy Application'
@@ -115,7 +119,7 @@ stages:
                          condition: failed()
                          displayName: 'Deploy Application Retry If Failed'
                          inputs:
-                           WebSiteName: '${{ variables.IISWebsite2 }}'
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
                            Package: '$(pipeline.workspace)\a'
                            TakeAppOfflineFlag: true
                            
@@ -125,4 +129,4 @@ stages:
                          inputs:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StartWebsite'
-                           StartStopWebsiteName: '${{ variables.IISWebsite2 }}'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
