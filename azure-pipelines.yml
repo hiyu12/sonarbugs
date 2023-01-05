@@ -22,7 +22,7 @@ steps:
     command: publish
     publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
+    zipAfterPublish: false
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
