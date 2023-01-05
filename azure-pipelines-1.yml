@@ -9,11 +9,11 @@ variables:
   IISWebsiteName: dotnetApp
 
 resources:
- pipelines:
-     - pipeline: 'buildpipeline'
-       project: 'dotnetapp'
-       source: 'Build Pipeline'
-       branch: 'main'
+  pipelines:
+    - pipeline: 'buildPipeline'
+      project: 'dotnetapp'
+      source: 'Build Pipeline'
+      branch: 'main'
 stages:
     - stage: DeployApp
       displayName: 'Deploy App'
@@ -29,7 +29,7 @@ stages:
                    steps:
                        - checkout: none
 
-                       - download: 'buildpipeline'
+                       - download: 'buildPipeline'
                          name: 'DownloadArtifact'
                          displayName: 'Download Artifact'
                          artifact: 'drop'
