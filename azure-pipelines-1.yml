@@ -24,7 +24,7 @@ stages:
       - template: temp/depTemp.yaml
         parameters:
           IISWebsiteName: dotnetApp
-          envtype: dev
+          envtype: dev.WIN-VM
   - stage: stagingServer
     dependsOn: 'DevelopmentServer'
     displayName: 'Staging Server Deploy'
