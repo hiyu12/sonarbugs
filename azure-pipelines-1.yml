@@ -3,4 +3,55 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+trigger:
+- none
+variables:
+  IISWebsiteName: dotnetApp
 
+resources:
+ pipelines:
+     - pipeline: 'buildpipeline'
+       project: 'dotnetapp'
+       source: 'Build Pipeline'
+       branch: 'main'
+stages:
+    - stage: DeployApp
+      displayName: 'Deploy App'
+      pool:
+        vmImage: windows-latest
+      jobs:
+          - deployment: Deployapp
+            displayName: 'Deploy Dotnet App'
+            environment: 'dev.WIN-VM'
+            strategy:
+             runOnce:
+                 deploy:
+                   steps:
+                       - checkout: none
+
+                       - download: 'buildpipeline'
+                         name: 'DownloadArtifact'
+                         displayName: 'Download Artifact'
+                         artifact: 'drop'
+
+                       - task: IISWebAppManagementOnMachineGroup@0
+                         name: 'StopService'
+                         displayName: 'Stop Service'
+                         inputs:
+                           IISDeploymentType: 'IISWebsite'
+                           ActionIISWebsite: 'StopWebsite'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                       - task: IISWebAppDeploymentOnMachineGroup@0
+                         name: 'DeployApp'
+                         displayName: 'Deploy Application'
+                         inputs:
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
+                           Package: '$(pipeline.workspace)\buildpipeline\drop'
+                           TakeAppOfflineFlag: true
+                       - task: IISWebAppManagementOnMachineGroup@0
+                         name: 'StartService'
+                         displayName: 'Start Service'
+                         inputs:
+                           IISDeploymentType: 'IISWebsite'
+                           ActionIISWebsite: 'StartWebsite'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
