@@ -5,9 +5,6 @@
 
 trigger:
 - none
-variables:
-  IISWebsite1: dotnetApp
-  IISWebsite2: stagingapp
 
 resources:
   pipelines:
@@ -22,7 +19,7 @@ stages:
       IISWebsiteName: dotnetApp
     displayName: 'Development Server Deploy'
     pool:
-        vmImage: windows-latest
+      vmImage: windows-latest
     jobs:
       - template: temp/depTemp.yaml
         parameters:
