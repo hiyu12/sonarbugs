@@ -35,7 +35,7 @@ stages:
     jobs:
       - job: 'ManualApproval'
         timeoutInMinutes: 4320
-        steps:
+        # steps:
           # - task: ManualValidation@0
           #   timeoutInMinutes: 1440
           #   inputs:
