@@ -47,17 +47,17 @@ stages:
                            IISDeploymentType: 'IISWebsite'
                            ActionIISWebsite: 'StopWebsite'
                            StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
-                      #  - task: IISWebAppDeploymentOnMachineGroup@0
-                      #    name: 'DeployApp'
-                      #    displayName: 'Deploy Application'
-                      #    inputs:
-                      #      WebSiteName: '${{ variables.IISWebsiteName }}'
-                      #      Package: '$(pipeline.workspace)\a\'
-                      #      TakeAppOfflineFlag: true
-                      #  - task: IISWebAppManagementOnMachineGroup@0
-                      #    name: 'StartService'
-                      #    displayName: 'Start Service'
-                      #    inputs:
-                      #      IISDeploymentType: 'IISWebsite'
-                      #      ActionIISWebsite: 'StartWebsite'
-                      #      StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                       - task: IISWebAppDeploymentOnMachineGroup@0
+                         name: 'DeployApp'
+                         displayName: 'Deploy Application'
+                         inputs:
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
+                           Package: '$(pipeline.workspace)\a'
+                           TakeAppOfflineFlag: true
+                       - task: IISWebAppManagementOnMachineGroup@0
+                         name: 'StartService'
+                         displayName: 'Start Service'
+                         inputs:
+                           IISDeploymentType: 'IISWebsite'
+                           ActionIISWebsite: 'StartWebsite'
+                           StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
