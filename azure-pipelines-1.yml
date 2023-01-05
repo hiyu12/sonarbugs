@@ -54,6 +54,15 @@ stages:
                            WebSiteName: '${{ variables.IISWebsiteName }}'
                            Package: '$(pipeline.workspace)\a'
                            TakeAppOfflineFlag: true
+                       - task: IISWebAppDeploymentOnMachineGroup@0
+                         name: 'DeployAppRetry'
+                         condition: failed()
+                         displayName: 'Deploy Application Retry If Failed'
+                         inputs:
+                           WebSiteName: '${{ variables.IISWebsiteName }}'
+                           Package: '$(pipeline.workspace)\a'
+                           TakeAppOfflineFlag: true
+                           
                        - task: IISWebAppManagementOnMachineGroup@0
                          name: 'StartService'
                          displayName: 'Start Service'
