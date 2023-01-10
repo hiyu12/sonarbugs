@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net6.0: {}
+    "net6.0": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
@@ -64,6 +64,7 @@
         },
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.401/RuntimeIdentifierGraph.json"
       }
+    }
     }
   }
 }
