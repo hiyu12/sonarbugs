@@ -12,7 +12,7 @@ pipeline {
                     def scannerHome = tool 'sonar';
                     withSonarQubeEnv('sona') {
                         sh "${scannerHome}/bin/sonar-scanner\
-                        -D sonar.projectKey=nodepro11"
+                        -D sonar.projectKey=localy1"
                         sh "dotnet build -c Release"
                     }
                 }
